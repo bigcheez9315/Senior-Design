@@ -1,3 +1,8 @@
+% Senior Design Engineering Analysis
+% Team 4: Avi Steinberg, Connor Rigg, Nick Barclay, Nick Burgess and Ben
+% Kunrath
+% 02/04/2018
+
 %Pad heat transfer analysis
   %Givens
     
@@ -5,8 +10,7 @@
         c_tis = 3.75; %kJ/kg
     %density of tissue
         rho_tis = 1000; %kg/m^3
-    %volume of tissue
-        V_tis = .000262; %m^3
+
     %change in temperature between center of body and final cooling temp
         T_delta = 23.9; %Celsius
     %hydraulic diameter of pad
@@ -31,9 +35,12 @@
     %contact area = Length water travels x width of pass
     % width of pass in pad
     w = .025; % looking at universal pad, width seems to be 1 in. ~ .025 m
-    A = w*L; %m^2
+    A = L*w; %m^2
     
-    
+    %volume of tissue contained 1 inch beneath pad
+    V_tis = A*.025; %m^3
+    % difference in temp between water in pad and ideal cooling temp of 55F
+     
     
     
 %Calculations
@@ -57,7 +64,9 @@
     
     %inside tissue
         % power generated inside of tissue  (W)
-            q = k_f.*T_delta./depth;
+            %q = k_f.*T_delta./depth;
+            q = 18; % body generates 100-120 W of heat so we assume that 
+                    % largest body part to cool will generate ~ 10 W
     %time (let's set this to 5 minutes
         t = 300; %s
     %Let's estimate the power needed in order to cool
@@ -131,25 +140,13 @@
     % q_cwb = h_wb*P*(T_s - T_in) where T_s is surface temp of water block
     % and T_in is inlet temperature of water
     
-    % For a given inlet temperature we can calculate T_cold of peltier
+    % For a given inlet temperature we can estimate T_cold of peltier
     % cell. We can also calculate the T_hot in a future step. We can use 
     % this temperature difference together with the applied amperage to
     % estimate Q_c from the TEC correlation chart and see if this is too
     % high. 
     
-    % First let's calculate T_cold:
-    
-    T_initial = 23; % We will use this for sample calculation of cold side.
-                    % This is ambient temperature so it will be initial
-                    % temp. of water before cooling
-     % Thermal resistance as heat travels from water to water block through
-     % copper plate 
-     R_cold =  (1/(h_wb*P))+(t_copper/(k_copper*A_copperplate));          
-     T_coldside = T_initial - q_h*R_cold; % see eq. 20 in reference pdf for details
-     
 
-  % Zone 3: Heat Transfer and Heat Production in the Peltier Cell
-  % Zone 4: Heat Transfer through the Copper Plate and Heat Sink
   % Here our goal is to find the hot side temperature of the copper plate
   
   % First we need to find the rate at which heat is transferred 
@@ -208,16 +205,7 @@
   
   T_hotside = q_hotside*R_Hot + T_ambient;
   
- % From the TEC performance chart we can extrapolate the 
- % Q_c, the cooling rate of the water to be .68*92 = 62.56 W-- too small
- 
-  
-  
-  
-  
-  
-  
-  
+
   
   
   
